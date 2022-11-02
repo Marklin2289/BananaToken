@@ -100,7 +100,7 @@ module.exports = {
     },
     contractSizer: {
         runOnCompile: false,
-        only: ["Raffle"],
+        only: ["BananaToken"],
     },
     namedAccounts: {
         deployer: {
