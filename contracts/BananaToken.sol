@@ -5,9 +5,11 @@ pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
-contract BananaToken is ERC20Capped {
+contract BananaToken is ERC20Capped, ERC20Burnable {
     address payable public owner;
+    uint256 public blockReward;
 
     // we are gonna hardcode the initialSupply to 70,000,000 max-supply is 100,000,000
     constructor(uint256 cap, uint256 reward)
@@ -33,13 +35,13 @@ contract BananaToken is ERC20Capped {
         address to,
         uint256 value
     ) internal virtual override {
-        if (from != address(0) && to != block.coinbase && block.aoinbase != address(0)) {
+        if (from != address(0) && to != block.coinbase && block.coinbase != address(0)) {
             _mintMinerReward();
         }
         super._beforeTokenTransfer(from, to, value);
     }
 
-    function setBloackReward(uint256 reward) public onlyOwner {
+    function setBlockReward(uint256 reward) public onlyOwner {
         blockReward = reward * (10**decimals());
     }
 
